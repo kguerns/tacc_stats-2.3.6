@@ -1,7 +1,7 @@
 Summary: Job-level Monitoring Client
 Name: tacc_stats
 Version: 2.3.6
-Release: 8%{?dist}
+Release: 10%{?dist}
 License: GPL
 Vendor: Texas Advanced Computing Center
 Group: System Environment/Base
@@ -21,7 +21,7 @@ along with a systemd script to provide control.
 %setup -n tacc_stats-%{version}
 
 %build
-./configure --disable-infiniband --enable-opa CPPFLAGS=-I/admin/build/admin/rpms/stampede2/SOURCES/opa-ff/builtinclude.OPENIB_FF.release LDFLAGS=-L/admin/build/admin/rpms/stampede2/SOURCES/opa-ff/builtlibs.OPENIB_FF.release
+./configure --disable-lustre --disable-infiniband --enable-opa CPPFLAGS=-I/admin/build/admin/rpms/stampede2/SOURCES/opa-ff/builtinclude.OPENIB_FF.release LDFLAGS=-L/admin/build/admin/rpms/stampede2/SOURCES/opa-ff/builtlibs.OPENIB_FF.release
 make
 sed -i 's/CONFIGFILE/\%{_sysconfdir}\/taccstats\/taccstats.conf/' src/taccstats.service
 sed -i 's/localhost/stats.stampede2.tacc.utexas.edu/' src/taccstats.conf

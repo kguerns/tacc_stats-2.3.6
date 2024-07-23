@@ -1,8 +1,11 @@
+/* Created by Kristen Guernsey (kguerns), July 2024
+   Captures instantaneous power reading from ipmitool (Baseboard Management Controller)
+   */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "stats.h"
 
-/* Captures instantaneous power reading from ipmitool */
 
 #define KEYS \
     X(power, "U=W", "instantaneous power")
@@ -14,7 +17,7 @@ static void ipmitool_collect(struct stats_type *type)
     char buf[80];
     unsigned int power;
 
-    /* Open ipmitool command for reading. */
+    /* Open ipmitool command for reading. Output formatted to only get the number. */
     file = popen("/bin/ipmitool dcmi power reading | grep Instantaneous | awk \'{print $(NF-1)}\'", "r");
     if (file == NULL) {
         printf("Failed to run ipmitool command\n" );
@@ -23,8 +26,8 @@ static void ipmitool_collect(struct stats_type *type)
 
     /* Store command output */
     if (fgets(buf, sizeof(buf), file) != NULL) {
-        printf("Power (W) = %s\n", buf); // Testing; remove later
-	power = atoi(buf);
+        printf("Power (W) = %s\n", buf);    // Testing; remove later
+	    power = atoi(buf);
     } else {
         goto out;
     }
@@ -37,7 +40,7 @@ static void ipmitool_collect(struct stats_type *type)
     if (stats == NULL)
         goto out;
 
-    power = 2; // Testing; remove later
+    power = 2;  // Testing; remove later
     stats_set(stats, "power", power);
 
     out:
